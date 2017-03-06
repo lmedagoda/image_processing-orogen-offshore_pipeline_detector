@@ -1,0 +1,63 @@
+name "offshore_pipeline_detector"
+
+using_library "offshore_pipeline_detector"
+using_library "opencv"
+using_library "frame_helper"
+import_types_from "base"
+import_types_from "offshore_pipeline_detector/pipeline.h"
+
+task_context "Task" do
+	needs_configuration
+        runtime_states :SEARCH_PIPE,:FOUND_PIPE,:FOLLOW_PIPE,:ALIGN_AUV,:CHECK_CANDIDATE,:LOST_PIPE,
+                       :WEAK_SIGNAL
+        property("default_distance_to_pipe","double",2.0).
+            doc("Rough estimation how far the pipeline is away. This is used to convert pixel into meter.")
+        property("default_fx","double",300).
+            doc("default focal length which is used if this information is" +
+                " not given by the camera frame")
+        property("default_fy","double",300).
+            doc("default focal length which is used if this information is" +
+                " not given by the camera frame")
+        property("min_count","int",10).
+            doc "number of images where a valid pipeline must be pressent to switch to follow"
+        property("min_width","double",0).
+            doc "minimal width of the pipe [m] 0 = disabled"
+        property("max_width","double",0).
+            doc "maximal width of the pipe [m] 0 = disabled"
+        property("find_confidence","double",0.8).
+            doc "minimum confidence for finding a pipeline"
+        property("lose_confidence","double",0.7).
+            doc "minimum confidence before losing a pipeline"
+        property("find_anisotropy", "double",-5).
+            doc "Anisotropy of the image. It is always negative. " +
+                "A value close to zero means that the image is uniform for all angles." 
+        property("weak_signal","double",0.8).
+            doc "if the confidence is <= this value the follower will switch to WEAK_SIGNAL"
+        property("invert_colors","bool",0)
+        property("use_channel","int",0)
+        property("debugging","bool",0)
+
+        ###############################
+        #ports
+        ##############################
+	input_port("frame", ro_ptr('base::samples::frame::Frame')).
+		doc 'Frames as recorded by the camera'
+	output_port("pipeline", "controlData::Pipeline").
+		doc 'The pipeline, the detector found'
+	output_port("pipeline_overlay", ro_ptr('base::samples::frame::Frame')).
+		doc 'The pipeline, the detector found'
+
+        output_port("debug","pipeline::DebugData").
+            doc "Debug output"
+
+        output_port("debug_frame",ro_ptr('base::samples::frame::Frame')).
+            doc "frame after some processing which is used to detect the pipeline"
+
+        #this can be used to calculate the rays for a specific angle
+        #do not use this method during operation
+        #debugging must be set to 1 otherwise an exception is raised 
+        operation('forceAngle').
+            returns('bool').
+            argument('angle','double','angle')
+	port_driven :frame
+end
