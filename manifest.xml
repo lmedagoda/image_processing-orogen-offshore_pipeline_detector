@@ -1,17 +1,12 @@
 <package>
-  <description brief="stub orogen for offshore pipeline detector">
-  
+  <description brief="stub package which integrates the offshore pipeline detector into rock">
   </description>
-  <author>Lashika Medagoda/lashika.medagoda@dfki.de</author>
+  <author></author>
   <license></license>
-  <url>http://</url>
-  <logo>http://</logo>
-  <depend package="base/cmake" />
-  <!--
-   To add any dependencies use the depend tag
-  <depend package="dummy-dependency-0" />
-	...
-  <depend package="dummy-dependency-n-1" />
-  <depend package="dummy-dependency-n" />
-  -->
+  <url></url>
+  <logo></logo>
+  <depend package="image_processing/offshore_pipeline_detector"/>
+  <depend package="base/orogen/types"/>
+  <depend package="image_processing/frame_helper"/>
+  <depend package="tools/logger"/>
 </package>
