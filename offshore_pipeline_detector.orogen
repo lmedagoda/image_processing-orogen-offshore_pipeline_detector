@@ -9,6 +9,10 @@ task_context "Task" do
     
     input_port("frame", ro_ptr('base::samples::frame::Frame')).
 		doc 'Frames as recorded by the camera'
+		
+	output_port "world_command", "/base/LinearAngular6DCommand"
+
+    output_port "aligned_position_command", "base::LinearAngular6DCommand"
 	
 	port_driven :frame
 end

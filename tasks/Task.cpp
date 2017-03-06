@@ -48,16 +48,7 @@ void Task::updateHook()
     } pos_command; // the position command you want to generate
 
 
-    // read ports
-
-    if(_orientation_sample.readNewest(body_state) == RTT::NewData)
-    {
-
-    }
-    if(_altitude_samples.readNewest(body_state) == RTT::NewData)
-    {
-
-    }
+    // read port
 
     if (_frame.readNewest(current_frame_)!= RTT::NewData)
         return; //we do not want to process an old image
@@ -68,9 +59,6 @@ void Task::updateHook()
     
     base::LinearAngular6DCommand world_command; // commands need a certain type
     base::LinearAngular6DCommand aligned_position_command; 
-
-    world_command.time = body_state.time;
-    aligned_position_command.time = body_state.time;
 
     aligned_position_command.x() = pos_command.x;
     aligned_position_command.y() = pos_command.y;
@@ -83,7 +71,7 @@ void Task::updateHook()
     // write to output ports
     _world_command.write(world_command);
     _aligned_position_command.write(aligned_position_command);
-    // _pipeline.write(detected_pipeline); // write out the detected pipeline parameters
+
 
     
 }

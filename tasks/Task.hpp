@@ -11,7 +11,7 @@ namespace offshore_pipeline_detector{
 	friend class TaskBase;
     protected:
   
-   
+    RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> current_frame_;
   
     public:
         /** TaskContext constructor for Task
